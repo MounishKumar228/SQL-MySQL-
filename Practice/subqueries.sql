@@ -545,3 +545,16 @@ WHERE department IN (
                 ELSE 0
             END) >= COUNT(*) / 2.0
 );
+SELECT emp_name, department
+FROM Employee
+WHERE department IN (
+    SELECT department
+    FROM Employee
+    GROUP BY department
+    HAVING SUM(
+                CASE
+                    WHEN salary > 60000 THEN 1
+                    ELSE 0
+                END
+              ) >= 2
+);
