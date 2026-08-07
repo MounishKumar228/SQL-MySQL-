@@ -558,3 +558,18 @@ WHERE department IN (
                 END
               ) >= 2
 );
+SELECT emp_name, salary
+FROM employee e1
+WHERE N - 1 = (
+    SELECT COUNT(DISTINCT e2.salary)
+    FROM employee e2
+    WHERE e2.salary > e1.salary
+);
+/* ========================================================
+Replace N with:
+
+1 → Highest salary
+2 → 2nd highest
+3 → 3rd highest
+10 → 10th highest
+*/ =========================================================
