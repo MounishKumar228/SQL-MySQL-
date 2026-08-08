@@ -573,3 +573,115 @@ Replace N with:
 3 → 3rd highest
 10 → 10th highest
 */ =========================================================
+SELECT emp_name, salary, department
+FROM Employee e1
+WHERE salary = (
+    SELECT MAX(e2.salary)
+    FROM Employee e2
+    WHERE e2.department = e1.department
+);
+
+SELECT emp_name, salary, department
+FROM Employee e1
+WHERE salary = (
+    SELECT MIN(e2.salary)
+    FROM Employee e2
+    WHERE e2.department = e1.department
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE EXISTS (
+    SELECT 1
+    FROM Employee e2
+    WHERE e2.salary = e1.salary
+      AND e2.emp_id <> e1.emp_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE salary > ALL (
+    SELECT e2.salary
+    FROM Employee e2
+    WHERE e2.department = e1.department
+      AND e2.emp_id <> e1.emp_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE EXISTS (
+    SELECT salary
+    FROM Employee e2
+    WHERE e2.department = e1.department
+      AND e2.salary < e1.salary
+      AND e2.emp_id <> e1.emp_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Employee e2
+    WHERE e2.department = e1.department
+      AND e2.salary > e1.salary
+      AND e2.emp_id <> e1.emp_id
+);
+
+SELECT emp_name, salary, department
+FROM Employee e1
+WHERE salary > (
+    SELECT AVG(e2.salary)
+    FROM Employee e2
+    WHERE e2.department = e1.department
+)
+AND EXISTS (
+    SELECT 1
+    FROM Employee e3
+    WHERE e3.department = e1.department
+      AND e3.emp_id <> e1.emp_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE salary < (
+    SELECT salary
+    FROM Employee e2
+    WHERE e2.emp_id = e1.manager_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE salary > (
+    SELECT AVG(e2.salary)
+    FROM Employee e2
+    WHERE e2.manager_id = e1.manager_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE salary > ALL (
+    SELECT salary
+    FROM Employee e2
+    WHERE e2.department = e1.department
+      AND e2.emp_id < e1.emp_id
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE EXISTS (
+    SELECT 1
+    FROM Employee e2
+    WHERE e2.department = e1.department
+      AND e2.salary = e1.salary + 10000
+);
+
+SELECT emp_name, salary
+FROM Employee e1
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Employee e2
+    WHERE e2.department = e1.department
+      AND e2.salary = e1.salary
+      AND e2.emp_id <> e1.emp_id
+);
+
