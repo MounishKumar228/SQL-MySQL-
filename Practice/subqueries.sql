@@ -685,3 +685,18 @@ WHERE NOT EXISTS (
       AND e2.emp_id <> e1.emp_id
 );
 
+SELECT emp_name, salary
+FROM Employee
+WHERE department IN (
+    SELECT department
+    FROM Employee
+    GROUP BY department
+    HAVING COUNT(*) > (
+        SELECT AVG(number_of_emp)
+        FROM (
+            SELECT COUNT(*) AS number_of_emp
+            FROM Employee
+            GROUP BY department
+        ) AS dept_counts
+    )
+);
